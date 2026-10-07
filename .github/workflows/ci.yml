@@ -13,11 +13,22 @@ jobs:
         node-version: [18, 20, 22]
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: npm install
+
       - run: npm test
+
+      - name: Avisar de fallo
+        if: failure()
+        run: echo "Algún step anterior ha fallado"
+
+      - name: Limpieza final
+        if: always()
+        run: echo "Esto se ejecuta pase lo que pase"
 
   lint:
     runs-on: ubuntu-latest
